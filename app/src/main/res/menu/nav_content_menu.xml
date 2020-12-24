@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item android:title="General">
+        <menu>
+            <group>
+                <item
+                    android:id="@+id/add"
+                    android:icon="@drawable/ic_baseline_add"
+                    android:title="NEW WORD" />
+
+                <item
+                    android:id="@+id/delete"
+                    android:icon="@drawable/ic_delete"
+                    android:title="Delete" />
+                <item
+                    android:id="@+id/share"
+                    android:icon="@drawable/ic_share"
+                    android:title="Share" />
+
+            </group>
+        </menu>
+    </item>
+    <item android:title="Category">
+        <menu>
+            <group>
+                <item
+                    android:id="@+id/addCategory"
+                    android:icon="@drawable/ic_add"
+                    android:title="Add Category" />
+                <item
+                    android:id="@+id/editCategory"
+                    android:icon="@drawable/ic_edit_black"
+                    android:title="Edit Category" />
+            </group>
+        </menu>
+    </item>
+    <item
+        android:id="@+id/setting"
+        android:icon="@drawable/ic_settings"
+        android:title="Settings" />
+    <item
+        android:id="@+id/about"
+        android:icon="@drawable/ic_info"
+        android:title="About" />
+</menu>

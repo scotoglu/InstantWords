@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="transparent_bg">#36D5D3D2</color>
+    <color name="purple_200">#FFBB86FC</color>
+    <color name="purple_500">#FF6200EE</color>
+    <color name="purple_700">#FF3700B3</color>
+    <color name="teal_200">#FF03DAC5</color>
+    <color name="teal_700">#FF018786</color>
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+    <color name="fab_bg_tint">#EC5526</color>
+    <color name="color_alizarin">#E74C3C</color>
+    <color name="color_peter_rıver">#2980B9</color>
+    <color name="color_sun_flower">#F1C40F</color>
+    <color name="color_carrot">#e67e22</color>
+    <color name="color_emerald">#2ecc71</color>
+    <color name="color_amethyst">#9b59b6</color>
+    <color name="appbar_bg">#E4D5D3D2</color>
+    <color name="search_query_bg">#9EFDD835</color>
+    <color name="fragment_bg">#6DFFFFFF</color>
+</resources>

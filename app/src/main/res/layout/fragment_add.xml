@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#5B000000"
+    android:clickable="true"
+    tools:context=".ui.AddFragment">
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <RelativeLayout
+            android:id="@+id/relativeLayoutCancel"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_above="@id/formLayout">
+
+        </RelativeLayout>
+
+
+        <LinearLayout
+            android:id="@+id/formLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:background="@drawable/add_fragment_bg"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:paddingHorizontal="25dp"
+            android:paddingTop="15dp">
+
+            <ImageView
+                android:id="@+id/cancel"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_above="@id/title"
+                android:layout_marginRight="10dp"
+                android:background="?attr/selectableItemBackground"
+                android:clickable="true"
+                android:src="@drawable/ic_cancel" />
+
+
+            <View
+                android:id="@+id/divider"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_below="@id/cancel"
+                android:layout_marginVertical="4dp"
+                android:background="?android:attr/listDivider" />
+
+            <TextView
+                android:id="@+id/title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_above="@id/formLayout"
+                android:padding="10dp"
+                android:text="ADD WORD"
+                android:textAlignment="center"
+                android:textSize="21sp" />
+
+            <View
+                android:id="@+id/divider2"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_below="@id/cancel"
+                android:layout_marginVertical="4dp"
+                android:background="?android:attr/listDivider" />
+
+            <Spinner
+                android:id="@+id/categorySpinner"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:spinnerMode="dropdown"
+                android:splitMotionEvents="true" />
+
+            <View
+                android:id="@+id/divider3"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_below="@id/cancel"
+                android:layout_marginVertical="4dp"
+                android:background="?android:attr/listDivider" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/red"
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:layout_margin="5dp"
+                    android:background="@color/color_alizarin" />
+
+                <TextView
+                    android:id="@+id/purple"
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:layout_margin="5dp"
+                    android:background="@color/color_peter_rıver" />
+
+                <TextView
+                    android:id="@+id/blue"
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:layout_margin="5dp"
+                    android:background="@color/color_carrot" />
+
+                <TextView
+                    android:id="@+id/yellow"
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:layout_margin="5dp"
+                    android:background="@color/color_sun_flower" />
+
+                <TextView
+                    android:id="@+id/green"
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:layout_margin="5dp"
+                    android:background="@color/color_emerald" />
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:labelFor="@+id/wordEdt"
+                android:text="Word:"
+                android:textSize="18sp" />
+
+
+            <EditText
+                android:id="@+id/wordEdt"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="25dp" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:labelFor="@+id/definitionEdt"
+                android:text="Definition:"
+                android:textSize="18sp" />
+
+            <EditText
+                android:id="@+id/definitionEdt"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <Button
+                android:id="@+id/addWord"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:layout_marginBottom="15dp"
+                android:background="@drawable/button_bg"
+                android:text="Save"
+                android:textColor="@color/black" />
+        </LinearLayout>
+
+    </RelativeLayout>
+</FrameLayout>
