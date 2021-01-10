@@ -52,15 +52,15 @@ public class WordRepository {
         return wordList;
     }
 
-    public LiveData<List<Word>> getWordsByCategory(String category) {
-        return wordDao.getWordsByCategory(category);
+    public LiveData<List<Word>> getWordsByCategory(int  categoryId) {
+        return wordDao.getWordsByCategory(categoryId);
     }
 
-    public List<Word> getWordsByCategoryList(String category) {
-        return wordDao.getWordsByCategoryList(category);
+    public List<Word> getWordsByCategoryList(int categoryId) {
+        return wordDao.getWordsByCategoryList(categoryId);
     }
 
-    public void updateCategoryTitle(String editedCategoryTitle, int wID) {
-        wordDao.updateCategoryTitle(editedCategoryTitle, wID);
-    }
+//    public void updateCategoryTitle(String editedCategoryTitle, int wID) {
+//        wordDao.updateCategoryTitle(editedCategoryTitle, wID);
+//    }
 }

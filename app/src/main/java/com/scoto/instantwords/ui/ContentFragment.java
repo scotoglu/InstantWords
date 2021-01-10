@@ -14,23 +14,19 @@ import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
 import com.scoto.instantwords.R;
-import com.scoto.instantwords.data.model.Word;
+import com.scoto.instantwords.data.model.Category;
 import com.scoto.instantwords.databinding.FragmentContentBinding;
 import com.scoto.instantwords.ui.adapter.WordAdapter;
+import com.scoto.instantwords.viewmodel.CategoryViewModel;
 import com.scoto.instantwords.viewmodel.ItemViewModel;
 import com.scoto.instantwords.viewmodel.WordViewModel;
 
-import java.util.List;
-
 public class ContentFragment extends Fragment implements WordAdapter.SelectedCount {
 
-
-    private static final String TAG = "ContentFragment";
     private WordViewModel wordViewModel;
     private FragmentContentBinding binding;
     private WordAdapter wordAdapter;
@@ -39,6 +35,8 @@ public class ContentFragment extends Fragment implements WordAdapter.SelectedCou
     private SearchView searchView;
     private ItemViewModel itemViewModel;
     private String selectedCategory = "All";
+    private int selectedCategoryId = -1;
+    private int DEFAULT_SELECTION = -1;
 
 
     //Interface to control MainActivity Toolbar reaction.
@@ -58,26 +56,25 @@ public class ContentFragment extends Fragment implements WordAdapter.SelectedCou
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         itemViewModel = new ViewModelProvider(getActivity()).get(ItemViewModel.class);
+        CategoryViewModel categoryViewModel = new ViewModelProvider(this).get(CategoryViewModel.class);
+        DEFAULT_SELECTION = categoryViewModel.getCategoryList().get(0).getId();
     }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         wordViewModel = new ViewModelProvider(this).get(WordViewModel.class);
-        if (selectedCategory.equals("All")) {
+        if (selectedCategoryId == DEFAULT_SELECTION) {
             wordViewModel.getData().observe(getViewLifecycleOwner(), words -> {
                 wordAdapter.setWordList(words);
                 wordAdapter.setContext(getContext());
                 wordAdapter.notifyDataSetChanged();
             });
         } else {
-            wordViewModel.getWordsByCategories(selectedCategory).observe(getViewLifecycleOwner(), new Observer<List<Word>>() {
-                @Override
-                public void onChanged(List<Word> words) {
-                    wordAdapter.setWordList(words);
-                    wordAdapter.setContext(getContext());
-                    wordAdapter.notifyDataSetChanged();
-                }
+            wordViewModel.getWordsByCategories(selectedCategoryId).observe(getViewLifecycleOwner(), words -> {
+                wordAdapter.setWordList(words);
+                wordAdapter.setContext(getContext());
+                wordAdapter.notifyDataSetChanged();
             });
         }
 
@@ -112,7 +109,9 @@ public class ContentFragment extends Fragment implements WordAdapter.SelectedCou
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                selectedCategory = parent.getItemAtPosition(position).toString();
+
+                Category category = (Category) parent.getSelectedItem();
+                selectedCategoryId = category.getId();
                 onActivityCreated(getArguments());
             }
 
@@ -160,7 +159,7 @@ public class ContentFragment extends Fragment implements WordAdapter.SelectedCou
     public void onSelectedItem(int count) {
         binding.itemCount.setText(String.valueOf(count));
         if (count > 0) {
-            Log.d(TAG, "onSelectedItem: IF");
+
             binding.appBar.setVisibility(View.VISIBLE);
             selectedToolbar.setToolbar();
         }

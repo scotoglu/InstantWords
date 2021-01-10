@@ -36,15 +36,15 @@ public interface WordDao {
     @Query("SELECT * FROM table_words WHERE is_reminded")
     List<Word> getAllIsReminded();
 
-    @Query("SELECT * FROM table_words WHERE category =:category ORDER BY created_at DESC")
-    LiveData<List<Word>> getWordsByCategory(String category);
+    @Query("SELECT * FROM table_words WHERE c_id=:c_id ORDER BY created_at DESC")
+    LiveData<List<Word>> getWordsByCategory(int c_id);
 
-    @Query("SELECT * FROM table_words WHERE category =:category ORDER BY created_at DESC")
-    List<Word> getWordsByCategoryList(String category);
+    @Query("SELECT * FROM table_words WHERE c_id =:c_id ORDER BY created_at DESC")
+    List<Word> getWordsByCategoryList(int c_id);
 
-
-    @Query("UPDATE table_words SET category =:editedCategory WHERE w_id=:wID")
-    void updateCategoryTitle(String editedCategory, int wID);
+//
+//    @Query("UPDATE table_words SET category =:editedCategory WHERE w_id=:wID")
+//    void updateCategoryTitle(String editedCategory, int wID);
 
 
 }

@@ -51,15 +51,15 @@ public class WordViewModel extends AndroidViewModel {
         return wordList;
     }
 
-    public LiveData<List<Word>> getWordsByCategories(String category) {
-        return repository.getWordsByCategory(category);
+    public LiveData<List<Word>> getWordsByCategories(int categoryId) {
+        return repository.getWordsByCategory(categoryId);
     }
 
-    public List<Word> getWordsByCategoryList(String category) {
-        return repository.getWordsByCategoryList(category);
+    public List<Word> getWordsByCategoryList(int categoryId) {
+        return repository.getWordsByCategoryList(categoryId);
     }
 
-    public void updateCategoryTitle(String editedCategoryTitle, int wId) {
-        repository.updateCategoryTitle(editedCategoryTitle, wId);
-    }
+//    public void updateCategoryTitle(String editedCategoryTitle, int wId) {
+//        repository.updateCategoryTitle(editedCategoryTitle, wId);
+//    }
 }

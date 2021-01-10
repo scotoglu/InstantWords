@@ -26,7 +26,8 @@ import java.util.Calendar;
 
 public class SettingFragment extends Fragment implements
         TimePickerDialog.OnTimeSetListener,
-        AdapterView.OnItemSelectedListener {
+        AdapterView.OnItemSelectedListener,
+        View.OnClickListener {
     private static final String TAG = "SettingFragment";
 
     private FragmentSettingBinding binding;
@@ -52,10 +53,9 @@ public class SettingFragment extends Fragment implements
         setSpinnerPerDayConfiguration();
         setToolbarConfiguration();
         setTimeTxt();
-        setPerDayCount();
         setFreqOfNotify();
-
-        binding.setTime.setOnClickListener(v -> {
+        setInfoBoxListener();
+        binding.setTimeStart.setOnClickListener(v -> {
             showTimePicker();
         });
         binding.clearAll.setOnClickListener(v -> {
@@ -66,14 +66,20 @@ public class SettingFragment extends Fragment implements
                 Toast.makeText(getContext(), "All Notification is Canceled.", Toast.LENGTH_SHORT).show();
                 binding.alarmStartLinear.setVisibility(View.INVISIBLE);
                 binding.frequencyLinear.setVisibility(View.INVISIBLE);
-                binding.perDayCountLinear.setVisibility(View.INVISIBLE);
+                binding.alarmEndLinear.setVisibility(View.INVISIBLE);
             } else {
                 binding.alarmStartLinear.setVisibility(View.VISIBLE);
                 binding.frequencyLinear.setVisibility(View.VISIBLE);
-                binding.perDayCountLinear.setVisibility(View.VISIBLE);
+                binding.alarmEndLinear.setVisibility(View.VISIBLE);
             }
         });
         return binding.getRoot();
+    }
+
+    private void setInfoBoxListener() {
+        binding.infoNStart.setOnClickListener(this);
+        binding.infoNEnd.setOnClickListener(this);
+        binding.infoNFreq.setOnClickListener(this);
     }
 
     private void clearAllData() {
@@ -112,9 +118,6 @@ public class SettingFragment extends Fragment implements
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getContext(),
                 R.array.not_num_per_day, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        binding.spinnerPerDay.setAdapter(adapter);
-        binding.spinnerPerDay.setOnItemSelectedListener(this);
-        binding.spinnerPerDay.setSelection(0);
     }
 
     private void setToolbarConfiguration() {
@@ -131,14 +134,7 @@ public class SettingFragment extends Fragment implements
         String minute = String.valueOf(sharedPrefManager.getPrefHourAndMinute(getString(R.string.minute)));
         String time = hour + ":" + minute;
         if (time != null) {
-            binding.time.setText(time);
-        }
-    }
-
-    private void setPerDayCount() {
-        String perDayCount = sharedPrefManager.getPref(getString(R.string.per_day_count));
-        if (perDayCount != null) {
-            binding.perDayCount.setText(perDayCount);
+            binding.timeStart.setText(time);
         }
     }
 
@@ -158,7 +154,7 @@ public class SettingFragment extends Fragment implements
 
 
         String timeFormat = DateFormat.getTimeInstance(DateFormat.SHORT).format(calendar.getTime());
-        binding.time.setText(timeFormat);
+        binding.timeStart.setText(timeFormat);
         sharedPrefManager.setPrefHourAndMinute(getString(R.string.hour), hourOfDay);
         sharedPrefManager.setPrefHourAndMinute(getString(R.string.minute), minute);
     }
@@ -167,15 +163,15 @@ public class SettingFragment extends Fragment implements
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
         int spinnerId = parent.getId();
         switch (spinnerId) {
-            case R.id.spinnerPerDay:
-                if (position > 0) {
-                    String value = parent.getItemAtPosition(position).toString();
-                    binding.perDayCount.setText(value);
-                    sharedPrefManager.setPref(getString(R.string.per_day_count), value);
-                } else {
-                    //do nothing
-                }
-                break;
+//            case R.id.spinnerPerDay:
+//                if (position > 0) {
+//                    String value = parent.getItemAtPosition(position).toString();
+//                    binding.perDayCount.setText(value);
+//                    sharedPrefManager.setPref(getString(R.string.per_day_count), value);
+//                } else {
+//                    //do nothing
+//                }
+//                break;
             case R.id.spinnerFrequency:
                 if (position > 0) {
                     String value = parent.getItemAtPosition(position).toString();
@@ -191,5 +187,19 @@ public class SettingFragment extends Fragment implements
     @Override
     public void onNothingSelected(AdapterView<?> parent) {
 
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.infoNStart:
+                Toast.makeText(getActivity(), "Alarm Start", Toast.LENGTH_SHORT).show();
+                break;
+            case R.id.infoNEnd:
+                Toast.makeText(getActivity(), "Alarm End", Toast.LENGTH_SHORT).show();
+                break;
+            case R.id.infoNFreq:
+                Toast.makeText(getActivity(), "Frequency Info", Toast.LENGTH_SHORT).show();
+        }
     }
 }

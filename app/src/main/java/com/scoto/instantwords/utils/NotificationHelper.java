@@ -32,7 +32,7 @@ public class NotificationHelper extends ContextWrapper {
     public NotificationHelper(Context context) {
         super(context);
         appDatabase = AppDatabase.getINSTANCE(context);
-        wordList = appDatabase.wordDao().getAllWords();
+        wordList = appDatabase.wordDao().getAllIsReminded();
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             createChannel();
         }

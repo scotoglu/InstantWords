@@ -1,8 +1,10 @@
 package com.scoto.instantwords.ui.adapter;
 
 import android.content.Context;
+import android.text.InputType;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
@@ -14,7 +16,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.scoto.instantwords.data.model.Category;
 import com.scoto.instantwords.databinding.CategoryItemBinding;
 import com.scoto.instantwords.utils.interfaces.IDialogDismiss;
-import com.scoto.instantwords.utils.interfaces.IUpdateCategory;
 import com.scoto.instantwords.viewmodel.CategoryViewModel;
 import com.scoto.instantwords.viewmodel.WordViewModel;
 
@@ -28,12 +29,10 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
     private Context context;
     private Fragment fragment;
     private IDialogDismiss dialogDismiss;
-    private IUpdateCategory iUpdateCategory;
 
 
-    public CategoryAdapter(Fragment fragment, IDialogDismiss dialogDismiss, IUpdateCategory iUpdateCategory) {
+    public CategoryAdapter(Fragment fragment, IDialogDismiss dialogDismiss) {
         this.dialogDismiss = dialogDismiss;
-        this.iUpdateCategory = iUpdateCategory;
         this.fragment = fragment;
         categoryViewModel = new ViewModelProvider(fragment).get(CategoryViewModel.class);
         wordViewModel = new ViewModelProvider(fragment).get(WordViewModel.class);
@@ -50,6 +49,16 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+
+        //To disable edit and delete first category item in Categories. ---->'All'
+        if (position == 0 || categoryList.get(position).getTitle().equals("All")) {
+            holder.binding.editCategoryTitle.setVisibility(View.INVISIBLE);
+            holder.binding.deleteCategory.setVisibility(View.INVISIBLE);
+
+            holder.binding.categoryTitle.setFocusable(false);
+            holder.binding.categoryTitle.setFocusableInTouchMode(false);
+            holder.binding.categoryTitle.setInputType(InputType.TYPE_NULL);
+        }
 
         final Category category = categoryList.get(position);
         holder.bind(category);
@@ -86,7 +95,6 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
                 Category category = new Category(newTitle);
                 category.setId(id);
                 categoryViewModel.update(category);
-                iUpdateCategory.onUpdateCategory(newTitle, "oldTitle");
                 dialogDismiss.onDismiss();
             });
             itemBinding.deleteCategory.setOnClickListener(v -> {

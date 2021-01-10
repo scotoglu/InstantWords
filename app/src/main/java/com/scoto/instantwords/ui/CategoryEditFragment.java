@@ -11,24 +11,19 @@ import androidx.fragment.app.DialogFragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
-import com.scoto.instantwords.data.model.Category;
-import com.scoto.instantwords.data.model.Word;
 import com.scoto.instantwords.databinding.FragmentCategoryEditBinding;
 import com.scoto.instantwords.ui.adapter.CategoryAdapter;
 import com.scoto.instantwords.utils.interfaces.IDialogDismiss;
-import com.scoto.instantwords.utils.interfaces.IUpdateCategory;
 import com.scoto.instantwords.viewmodel.CategoryViewModel;
 import com.scoto.instantwords.viewmodel.WordViewModel;
 
-import java.util.List;
-
-public class CategoryEditFragment extends DialogFragment implements IDialogDismiss, IUpdateCategory {
+public class CategoryEditFragment extends DialogFragment implements IDialogDismiss {
 
     private WordViewModel wordViewModel;
     private CategoryViewModel categoryViewModel;
     private CategoryAdapter categoryAdapter;
     private FragmentCategoryEditBinding binding;
-
+    private static final String TAG = "CategoryEditFragment";
 
     public CategoryEditFragment() {
         //Empty Constructor
@@ -62,7 +57,7 @@ public class CategoryEditFragment extends DialogFragment implements IDialogDismi
     }
 
     private void setRecyclerView() {
-        categoryAdapter = new CategoryAdapter(this, this, this);
+        categoryAdapter = new CategoryAdapter(this, this);
         binding.categoryRecycler.setLayoutManager(new LinearLayoutManager(getActivity()));
         binding.categoryRecycler.setHasFixedSize(true);
         binding.categoryRecycler.scrollToPosition(0);
@@ -74,18 +69,5 @@ public class CategoryEditFragment extends DialogFragment implements IDialogDismi
         dismiss();
     }
 
-    @Override
-    public void onUpdateCategory(String newTitle, String oldTitle) {
-        //Updates All Fields
 
-        List<Word> wordList = wordViewModel.getWordsByCategoryList(oldTitle);
-        if (wordList != null) {
-            for (Word word : wordList
-            ) {
-                wordViewModel.updateCategoryTitle(newTitle, word.getId());
-            }
-        }
-
-
-    }
 }

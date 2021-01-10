@@ -141,14 +141,14 @@ public class WordFragment extends Fragment implements View.OnClickListener {
 
     private void saveWord() {
         Log.d(TAG, "saveWord: Save Word");
-        String category = word.getCategory();
+        int category = word.getC_id();
         String wordTxt = wordBinding.word.getText().toString();
         String definitionTxt = wordBinding.definition.getText().toString();
-        Word data = new Word(wordTxt, definitionTxt, "");
+        Word data = new Word(wordTxt, definitionTxt, -1);
         data.setId(word.getId());
         data.setIsReminded(word.getIsReminded());
         data.setBgColor(wordBg);
-        data.setCategory(category);
+        data.setC_id(category);
         wordViewModel.update(data);
         Toast.makeText(getContext(), "Updated.", Toast.LENGTH_SHORT).show();
         onDetach();

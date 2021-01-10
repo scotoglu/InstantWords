@@ -5,13 +5,14 @@ import android.os.Parcelable;
 
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
+import androidx.room.ForeignKey;
 import androidx.room.PrimaryKey;
 
 @Entity(tableName = "table_words")
 public class Word implements Parcelable {
 
     @PrimaryKey(autoGenerate = true)
-    @ColumnInfo(name = "w_id")
+    @ColumnInfo(name = "id")
     private int id;
 
     @ColumnInfo(name = "word")
@@ -35,16 +36,20 @@ public class Word implements Parcelable {
     @ColumnInfo(name = "is_learned")
     private boolean isLearned;
 
-    @ColumnInfo(name = "category")
-    private String category;
+    @ForeignKey(entity = Category.class,
+            parentColumns = "c_id",
+            childColumns = "id",
+            onUpdate = ForeignKey.CASCADE)
+    @ColumnInfo(name = "c_id")
+    private int c_id;//Category ID
 
 
-    public Word(String word, String definition, String category) {
+    public Word(String word, String definition, int c_id) {
         this.word = word;
         this.definition = definition;
         this.createdAt = System.currentTimeMillis();
         this.isSelected = false;
-        this.category = category;
+        this.c_id = c_id;
         this.isReminded = 0;
         this.isLearned = false;
     }
@@ -56,7 +61,7 @@ public class Word implements Parcelable {
         definition = in.readString();
         createdAt = in.readLong();
         bgColor = in.readString();
-        category = in.readString();
+        c_id = in.readInt();
         isReminded = in.readInt();
         isSelected = in.readByte() != 0;
     }
@@ -74,12 +79,14 @@ public class Word implements Parcelable {
         }
     };
 
-    public String getCategory() {
-        return category;
+
+    public int getC_id() {
+        return c_id;
     }
 
-    public void setCategory(String category) {
-        this.category = category;
+
+    public void setC_id(int c_id) {
+        this.c_id = c_id;
     }
 
     public String getWord() {
@@ -157,7 +164,7 @@ public class Word implements Parcelable {
         dest.writeInt(isReminded);
         dest.writeString(word);
         dest.writeString(definition);
-        dest.writeString(category);
+        dest.writeInt(c_id);
         dest.writeLong(createdAt);
         dest.writeString(bgColor);
         dest.writeByte((byte) (isSelected ? 1 : 0));

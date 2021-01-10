@@ -22,7 +22,6 @@ import com.scoto.instantwords.viewmodel.CategoryViewModel;
 import com.scoto.instantwords.viewmodel.ItemViewModel;
 import com.scoto.instantwords.viewmodel.WordViewModel;
 
-import java.util.ArrayList;
 import java.util.List;
 
 
@@ -35,7 +34,7 @@ public class AddFragment extends Fragment implements View.OnClickListener, Adapt
     private View view;
     private ItemViewModel itemViewModel;
     private CategoryViewModel categoryViewModel;
-    private String selectedCategory;
+    private int selectedCategoryId;
 
     public AddFragment() {
         // Required empty public constructor
@@ -75,14 +74,9 @@ public class AddFragment extends Fragment implements View.OnClickListener, Adapt
 
     private void setSpinner() {
         List<Category> categories = categoryViewModel.getCategoryList();
-        List<String> list = new ArrayList<>();
-        list.add("Select Category");
-        for (Category category : categories
-        ) {
-            list.add(category.getTitle());
-        }
-        if (list.size() > 0) {
-            ArrayAdapter<String> adapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_spinner_item, list);
+
+        if (categories.size() > 0) {
+            ArrayAdapter<Category> adapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_spinner_item, categories);
             adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
             binding.categorySpinner.setAdapter(adapter);
         }
@@ -110,13 +104,13 @@ public class AddFragment extends Fragment implements View.OnClickListener, Adapt
         if (word.isEmpty() || definition.isEmpty()) {
             Toast.makeText(getContext(), "Fill all fields.", Toast.LENGTH_SHORT).show();
         } else {
-            if (selectedCategory != null) {
-                Word data = new Word(word, definition, selectedCategory);
+            if (selectedCategoryId != -1) {
+                Word data = new Word(word, definition, selectedCategoryId);
                 data.setBgColor(colorCode);
                 wordViewModel.insert(data);
                 cancelToAdding();//Close current fragment
             } else {
-                selectedCategory = "";
+                selectedCategoryId = -1;
             }
 
         }
@@ -166,8 +160,8 @@ public class AddFragment extends Fragment implements View.OnClickListener, Adapt
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
 
         if (position > 0) {
-            String category = parent.getItemAtPosition(position).toString();
-            selectedCategory = category;
+            Category category = (Category) parent.getSelectedItem();
+            selectedCategoryId = category.getId();
         }
     }
 

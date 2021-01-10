@@ -21,11 +21,11 @@ public class AlarmHelper {
     private PendingIntent pendingIntent;
     private final int ALARM_TYPE = AlarmManager.RTC_WAKEUP;
     private static final String TAG = "AlarmHelper";
-    private ArrayList<Word> arrayList;
 
-    public AlarmHelper(Activity activity, ArrayList<Word> words) {
+
+    public AlarmHelper(Activity activity) {
         this.activity = activity;
-        this.arrayList = words;
+
         if (alarmManager == null) {
             alarmManager = (AlarmManager) activity.getSystemService(Context.ALARM_SERVICE);
         }

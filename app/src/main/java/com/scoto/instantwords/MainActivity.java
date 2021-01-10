@@ -28,11 +28,11 @@ import com.scoto.instantwords.ui.CategoryEditFragment;
 import com.scoto.instantwords.ui.ContentFragment;
 import com.scoto.instantwords.ui.SettingFragment;
 import com.scoto.instantwords.utils.AlarmHelper;
+import com.scoto.instantwords.utils.NotificationReceiver;
 import com.scoto.instantwords.viewmodel.CategoryViewModel;
 import com.scoto.instantwords.viewmodel.ItemViewModel;
 import com.scoto.instantwords.viewmodel.WordViewModel;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements
@@ -40,8 +40,9 @@ public class MainActivity extends AppCompatActivity implements
         ContentFragment.SelectedToolbar {
     private static final String TAG = "MainActivity";
     private ActivityMainBinding binding;
-    private CategoryViewModel categoryViewModel;
+    private List<Word> reminderList;
     private ItemViewModel itemViewModel;
+    private AlarmHelper alarmHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,36 +71,26 @@ public class MainActivity extends AppCompatActivity implements
         configurationNavigationView();
         configurationSpinner();
         startAlarm();
-
     }
 
 
     private void startAlarm() {
         Log.d(TAG, "startAlarm: Function");
         WordViewModel wordViewModel = new ViewModelProvider(this).get(WordViewModel.class);
-        List<Word> words = wordViewModel.getAllIsReminded();
-        if (words.size() > 0) {
-            Log.d(TAG, "startAlarm: if cond");
-            AlarmHelper alarmManagement = new AlarmHelper(this, (ArrayList<Word>) words);
-            alarmManagement.setAlarm();
+        reminderList = wordViewModel.getAllIsReminded();
+        if (reminderList.size() > 0) {
+            Log.d(TAG, "startAlarm: Therer some words on list.");
+            alarmHelper = new AlarmHelper(this);
+            alarmHelper.setAlarm();
         }
     }
 
     private void configurationSpinner() {
-        List<String> list = new ArrayList<>();
         CategoryViewModel categoryViewModel = new ViewModelProvider(this).get(CategoryViewModel.class);
         categoryViewModel.getCategories().observe(this, new Observer<List<Category>>() {
             @Override
             public void onChanged(List<Category> categories) {
-                if (list.size() > 0) {
-                    list.clear();
-                }
-                for (Category category : categories
-                ) {
-                    list.add(category.getTitle());
-                }
-                list.add(0,"All");
-                ArrayAdapter<String> adapter = new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_spinner_item, list);
+                ArrayAdapter<Category> adapter = new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_spinner_item, categories);
                 adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                 binding.contentFilter.setAdapter(adapter);
             }
@@ -215,8 +206,9 @@ public class MainActivity extends AppCompatActivity implements
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        if (binding != null)
+        if (binding != null) {
             binding = null;
+        }
     }
 
 
