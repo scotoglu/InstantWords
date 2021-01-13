@@ -103,14 +103,14 @@
                     android:layout_width="32dp"
                     android:layout_height="32dp"
                     android:layout_margin="5dp"
-                    android:background="@color/color_peter_rıver" />
+                    android:background="@color/color_amethyst" />
 
                 <TextView
                     android:id="@+id/blue"
                     android:layout_width="32dp"
                     android:layout_height="32dp"
                     android:layout_margin="5dp"
-                    android:background="@color/color_carrot" />
+                    android:background="@color/color_peter_rıver" />
 
                 <TextView
                     android:id="@+id/yellow"

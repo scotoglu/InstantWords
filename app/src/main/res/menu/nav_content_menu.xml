@@ -1,22 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <item android:title="General">
+    <item android:title="Word">
         <menu>
             <group>
                 <item
                     android:id="@+id/add"
                     android:icon="@drawable/ic_baseline_add"
-                    android:title="NEW WORD" />
+                    android:title="New Word" />
 
                 <item
                     android:id="@+id/delete"
                     android:icon="@drawable/ic_delete"
                     android:title="Delete" />
-                <item
-                    android:id="@+id/share"
-                    android:icon="@drawable/ic_share"
-                    android:title="Share" />
+
 
             </group>
         </menu>
@@ -35,6 +32,11 @@
             </group>
         </menu>
     </item>
+
+    <item
+        android:id="@+id/share"
+        android:icon="@drawable/ic_share"
+        android:title="Share" />
     <item
         android:id="@+id/setting"
         android:icon="@drawable/ic_settings"

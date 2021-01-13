@@ -1,12 +1,12 @@
 package com.scoto.instantwords.ui;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.SearchView;
@@ -37,6 +37,8 @@ public class ContentFragment extends Fragment implements WordAdapter.SelectedCou
     private String selectedCategory = "All";
     private int selectedCategoryId = -1;
     private int DEFAULT_SELECTION = -1;
+    private boolean isOpen = false;
+
 
 
     //Interface to control MainActivity Toolbar reaction.
@@ -140,9 +142,9 @@ public class ContentFragment extends Fragment implements WordAdapter.SelectedCou
         });
 
         setRecyclerView();
-
         return binding.getRoot();
     }
+
 
     private void setRecyclerView() {
         wordAdapter = new WordAdapter(this, this);

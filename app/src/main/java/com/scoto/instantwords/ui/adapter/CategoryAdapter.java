@@ -55,6 +55,7 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
             holder.binding.editCategoryTitle.setVisibility(View.INVISIBLE);
             holder.binding.deleteCategory.setVisibility(View.INVISIBLE);
 
+            //Disable functionality of related EditText, only display 'text'
             holder.binding.categoryTitle.setFocusable(false);
             holder.binding.categoryTitle.setFocusableInTouchMode(false);
             holder.binding.categoryTitle.setInputType(InputType.TYPE_NULL);
@@ -87,14 +88,12 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
 
             itemBinding.editCategoryTitle.setOnClickListener(v -> {
 
-
                 String newTitle = itemBinding.categoryTitle.getText().toString();
-                Toast.makeText(context, "Updated", Toast.LENGTH_SHORT).show();
-                int id = categoryList.get(getLayoutPosition()).getId();
 
-                Category category = new Category(newTitle);
-                category.setId(id);
+                Category category = categoryList.get(getLayoutPosition());
+                category.setTitle(newTitle);
                 categoryViewModel.update(category);
+                Toast.makeText(context, "Updated", Toast.LENGTH_SHORT).show();
                 dialogDismiss.onDismiss();
             });
             itemBinding.deleteCategory.setOnClickListener(v -> {

@@ -39,7 +39,6 @@
                         android:layout_marginRight="45dp"
                         android:layoutDirection="rtl"
                         android:textAlignment="center"
-
                         app:queryBackground="@drawable/search_view_bg_shape"
                         app:queryHint="Search Word" />
 

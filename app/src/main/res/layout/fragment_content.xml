@@ -2,9 +2,9 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/frameLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:id="@+id/frameLayout"
     tools:context=".ui.ContentFragment">
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
@@ -66,29 +66,21 @@
                     android:id="@+id/recyclerView"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_above="@+id/floatingBtn"
                     app:layoutManager="androidx.recyclerview.widget.StaggeredGridLayoutManager"
                     app:spanCount="2"
                     tools:listitem="@layout/word_item" />
 
-                <LinearLayout
-                    android:id="@+id/floatingBtn"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentBottom="true"
-                    android:background="@drawable/bottom_of_content"
-                    android:gravity="center"
-                    android:orientation="horizontal"
-                    android:padding="5dp">
 
-                    <com.google.android.material.floatingactionbutton.FloatingActionButton
-                        android:id="@+id/addBtn"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:backgroundTint="@color/fab_bg_tint"
-                        android:src="@drawable/ic_baseline_add" />
-                </LinearLayout>
             </RelativeLayout>
+
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/addBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom|center"
+                android:layout_margin="20dp"
+                android:backgroundTint="@color/fab_bg_tint"
+                android:src="@drawable/ic_baseline_add" />
         </androidx.coordinatorlayout.widget.CoordinatorLayout>
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </FrameLayout>

@@ -74,13 +74,11 @@ public class AddFragment extends Fragment implements View.OnClickListener, Adapt
 
     private void setSpinner() {
         List<Category> categories = categoryViewModel.getCategoryList();
-
         if (categories.size() > 0) {
             ArrayAdapter<Category> adapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_spinner_item, categories);
             adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
             binding.categorySpinner.setAdapter(adapter);
         }
-
         binding.categorySpinner.setOnItemSelectedListener(this);
 
     }
@@ -130,23 +128,23 @@ public class AddFragment extends Fragment implements View.OnClickListener, Adapt
         switch (itemId) {
             case R.id.red:
                 binding.formLayout.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.color_alizarin));
-                colorCode = "#E74C3C";
+                colorCode = "#E74C3C";//RED
                 break;
             case R.id.green:
                 binding.formLayout.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.color_emerald));
-                colorCode = "#2ecc71";
+                colorCode = "#2ecc71";//GREEN
                 break;
             case R.id.blue:
                 binding.formLayout.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.color_peter_rıver));
-                colorCode = "#2980B9";
+                colorCode = "#2980B9";//BLUE
                 break;
             case R.id.yellow:
                 binding.formLayout.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.color_sun_flower));
-                colorCode = "#F1C40F";
+                colorCode = "#F1C40F";//YElLOW
                 break;
             case R.id.purple:
                 binding.formLayout.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.color_amethyst));
-                colorCode = "#9b59b6";
+                colorCode = "#9b59b6";//PURPLE
                 break;
             case R.id.cancel:
             case R.id.relativeLayoutCancel:
@@ -158,7 +156,6 @@ public class AddFragment extends Fragment implements View.OnClickListener, Adapt
 
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-
         if (position > 0) {
             Category category = (Category) parent.getSelectedItem();
             selectedCategoryId = category.getId();
@@ -167,7 +164,7 @@ public class AddFragment extends Fragment implements View.OnClickListener, Adapt
 
     @Override
     public void onNothingSelected(AdapterView<?> parent) {
-
+        //
     }
 
     @Override

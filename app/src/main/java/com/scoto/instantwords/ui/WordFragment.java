@@ -28,11 +28,13 @@ public class WordFragment extends Fragment implements View.OnClickListener {
     private FragmentWordBinding wordBinding;
     private WordViewModel wordViewModel;
     private Word word;
+    private Word changedWord;
     private View view;
     private String wordBg = "";
+    private String bg = "";
 
     public WordFragment() {
-
+        //Empty Constructor required
     }
 
     public static WordFragment newInstance(Word word) {
@@ -60,8 +62,10 @@ public class WordFragment extends Fragment implements View.OnClickListener {
 
         word = getArguments().getParcelable("DATA");
         wordBinding.setWord(word);
-        wordBg = word.getBgColor();
 
+
+        wordBg = word.getBgColor();//Layout Background Color
+        bg = word.getBgColor();//use, when checking the changes when leaving from add word fragment.
 
         return view;
     }
@@ -71,7 +75,6 @@ public class WordFragment extends Fragment implements View.OnClickListener {
         wordBinding.share.setOnClickListener(this::onClick);
         wordBinding.delete.setOnClickListener(this::onClick);
         wordBinding.relativeLayoutContent.setOnClickListener(this::onClick);
-        wordBinding.notifyOnOff.setOnClickListener(this::onClick);
         //Color Group
         wordBinding.red.setOnClickListener(this::onClick);
         wordBinding.blue.setOnClickListener(this::onClick);
@@ -91,9 +94,6 @@ public class WordFragment extends Fragment implements View.OnClickListener {
     public void onClick(View v) {
         int viewId = v.getId();
         switch (viewId) {
-            case R.id.notifyOnOff:
-                setNotifyStatus();
-                break;
             case R.id.save:
                 saveWord();
                 break;
@@ -125,32 +125,19 @@ public class WordFragment extends Fragment implements View.OnClickListener {
         getActivity().getSupportFragmentManager().popBackStack();
     }
 
-    private void setNotifyStatus() {
-
-        Toast.makeText(getActivity(), "Clicked", Toast.LENGTH_SHORT).show();
-        if (word.getIsReminded() == 0) {
-            wordBinding.notifyOnOff.setImageResource(R.drawable.ic_notifications_active);
-            word.setIsReminded(1);
-            Toast.makeText(getActivity(), getString(R.string.reminder_on), Toast.LENGTH_SHORT).show();
-        } else {
-            wordBinding.notifyOnOff.setImageResource(R.drawable.ic_notifications_off);
-            word.setIsReminded(0);
-            Toast.makeText(getActivity(), getString(R.string.reminder_off), Toast.LENGTH_SHORT).show();
-        }
-    }
-
     private void saveWord() {
         Log.d(TAG, "saveWord: Save Word");
-        int category = word.getC_id();
+
         String wordTxt = wordBinding.word.getText().toString();
         String definitionTxt = wordBinding.definition.getText().toString();
-        Word data = new Word(wordTxt, definitionTxt, -1);
-        data.setId(word.getId());
-        data.setIsReminded(word.getIsReminded());
-        data.setBgColor(wordBg);
-        data.setC_id(category);
-        wordViewModel.update(data);
-        Toast.makeText(getContext(), "Updated.", Toast.LENGTH_SHORT).show();
+
+        word.setWord(wordTxt);
+        word.setDefinition(definitionTxt);
+        word.setBgColor(wordBg);
+
+        wordViewModel.update(word);
+
+        Toast.makeText(getContext(), getString(R.string.changes_saved), Toast.LENGTH_SHORT).show();
         onDetach();
 
     }
@@ -182,10 +169,23 @@ public class WordFragment extends Fragment implements View.OnClickListener {
     }
 
     private void setLayoutBg(String colorCode) {
-        wordBg = colorCode;
+        wordBg = colorCode;//Updated layout bg color with new color code.
         if (colorCode != "") {
             wordBinding.relativeLayoutContent.setBackgroundColor(Color.parseColor(colorCode));
         }
+    }
+
+
+
+    private boolean isChanged() {
+        String wordText = wordBinding.word.getText().toString();
+        String definitionText = wordBinding.definition.getText().toString();
+        if (!word.getWord().equals(wordText)
+                || !word.getDefinition().equals(definitionText)
+                || bg != wordBg) {
+            return false;
+        }
+        return true;
     }
 
     @Override
@@ -196,4 +196,32 @@ public class WordFragment extends Fragment implements View.OnClickListener {
         inputMethodManager.hideSoftInputFromWindow(view.getWindowToken(), 0);
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        //When entered to fragment
+        Log.d(TAG, "onResume: Word Fragment");
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        //When leaving from fragment
+        //Checks if data is changed, if its then save changes.
+        //Some users may forget to save changes.
+
+        if (!isChanged()) {
+            //Save changes before leaving.
+            Log.d(TAG, "onPause: Data is changed, save them before leaving.");
+            //There is two way to save changes
+            //one,user can save with 'save' btn,
+            //second, app save automatically save when closing/leaving fragment.
+            //Here second one.
+            saveWord();
+
+        } else {
+            // do nothing
+        }
+        Log.d(TAG, "onPause: Word Fragment");
+    }
 }

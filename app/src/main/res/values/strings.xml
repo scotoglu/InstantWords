@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">InstantWords</string>
+    <string name="app_name">Instant Word</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="open">OPEN</string>
     <string name="close">CLOSE</string>
@@ -12,34 +12,13 @@
     <string name="time_for_alarm">timeForAlarm</string>
     <string name="hour">hour</string>
     <string name="minute">minute</string>
-    <string-array name="not_num_per_day">
-        <item>Select</item>
-        <item>1</item>
-        <item>3</item>
-        <item>5</item>
-    </string-array>
-    <string-array name="frequency_of_notification">
-        <item>Select</item>
-        <item>10</item>
-        <item>20</item>
-        <item>30</item>
-    </string-array>
-    <!-- Preference Titles -->
-    <string name="messages_header">Messages</string>
-    <string name="sync_header">Sync</string>
 
-    <!-- Messages Preferences -->
-    <string name="signature_title">Your signature</string>
-    <string name="reply_title">Default reply action</string>
-
-    <!-- Sync Preferences -->
-    <string name="sync_title">Sync email periodically</string>
-    <string name="attachment_title">Download incoming attachments</string>
-    <string name="attachment_summary_on">Automatically download attachments for incoming emails
-    </string>
     <string name="attachment_summary_off">Only download attachments when manually requested</string>
     <string name="reminder_on">Reminder on.</string>
     <string name="reminder_off">Reminder off.</string>
     <string name="deletion">Deleted.</string>
     <string name="add_category">New Category</string>
+
+    <string name="category_all">All</string>
+    <string name="changes_saved">Changes saved.</string>
 </resources>

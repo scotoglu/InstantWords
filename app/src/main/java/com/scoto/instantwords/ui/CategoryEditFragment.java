@@ -19,7 +19,6 @@ import com.scoto.instantwords.viewmodel.WordViewModel;
 
 public class CategoryEditFragment extends DialogFragment implements IDialogDismiss {
 
-    private WordViewModel wordViewModel;
     private CategoryViewModel categoryViewModel;
     private CategoryAdapter categoryAdapter;
     private FragmentCategoryEditBinding binding;
@@ -44,7 +43,6 @@ public class CategoryEditFragment extends DialogFragment implements IDialogDismi
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        wordViewModel = new ViewModelProvider(getActivity()).get(WordViewModel.class);
     }
 
     @Nullable

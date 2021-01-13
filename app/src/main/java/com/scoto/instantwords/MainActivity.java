@@ -20,18 +20,14 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.google.android.material.navigation.NavigationView;
 import com.scoto.instantwords.data.model.Category;
-import com.scoto.instantwords.data.model.Word;
 import com.scoto.instantwords.databinding.ActivityMainBinding;
 import com.scoto.instantwords.ui.AboutFragment;
 import com.scoto.instantwords.ui.AddCategoryFragment;
 import com.scoto.instantwords.ui.CategoryEditFragment;
 import com.scoto.instantwords.ui.ContentFragment;
 import com.scoto.instantwords.ui.SettingFragment;
-import com.scoto.instantwords.utils.AlarmHelper;
-import com.scoto.instantwords.utils.NotificationReceiver;
 import com.scoto.instantwords.viewmodel.CategoryViewModel;
 import com.scoto.instantwords.viewmodel.ItemViewModel;
-import com.scoto.instantwords.viewmodel.WordViewModel;
 
 import java.util.List;
 
@@ -40,9 +36,7 @@ public class MainActivity extends AppCompatActivity implements
         ContentFragment.SelectedToolbar {
     private static final String TAG = "MainActivity";
     private ActivityMainBinding binding;
-    private List<Word> reminderList;
     private ItemViewModel itemViewModel;
-    private AlarmHelper alarmHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,20 +64,8 @@ public class MainActivity extends AppCompatActivity implements
         configurationDrawerLayout();
         configurationNavigationView();
         configurationSpinner();
-        startAlarm();
     }
 
-
-    private void startAlarm() {
-        Log.d(TAG, "startAlarm: Function");
-        WordViewModel wordViewModel = new ViewModelProvider(this).get(WordViewModel.class);
-        reminderList = wordViewModel.getAllIsReminded();
-        if (reminderList.size() > 0) {
-            Log.d(TAG, "startAlarm: Therer some words on list.");
-            alarmHelper = new AlarmHelper(this);
-            alarmHelper.setAlarm();
-        }
-    }
 
     private void configurationSpinner() {
         CategoryViewModel categoryViewModel = new ViewModelProvider(this).get(CategoryViewModel.class);
@@ -125,6 +107,7 @@ public class MainActivity extends AppCompatActivity implements
         toggle.setHomeAsUpIndicator(R.mipmap.ic_hamburger);
         toggle.syncState();
     }
+
 
     private void addCategory() {
         //create new category
@@ -210,6 +193,5 @@ public class MainActivity extends AppCompatActivity implements
             binding = null;
         }
     }
-
 
 }
