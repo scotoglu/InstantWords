@@ -18,8 +18,9 @@ import com.scoto.instantwords.R;
 import com.scoto.instantwords.data.model.Category;
 import com.scoto.instantwords.data.model.Word;
 import com.scoto.instantwords.databinding.FragmentAddBinding;
+import com.scoto.instantwords.utils.SharedPrefManager;
 import com.scoto.instantwords.viewmodel.CategoryViewModel;
-import com.scoto.instantwords.viewmodel.ItemViewModel;
+import com.scoto.instantwords.viewmodel.ToolbarViewModel;
 import com.scoto.instantwords.viewmodel.WordViewModel;
 
 import java.util.List;
@@ -32,7 +33,7 @@ public class AddFragment extends Fragment implements View.OnClickListener, Adapt
     private String colorCode = "#FFFFFFFF";
     private WordViewModel wordViewModel;
     private View view;
-    private ItemViewModel itemViewModel;
+    private ToolbarViewModel toolbarViewModel;
     private CategoryViewModel categoryViewModel;
     private int selectedCategoryId;
 
@@ -44,7 +45,6 @@ public class AddFragment extends Fragment implements View.OnClickListener, Adapt
     public static AddFragment newInstance(String param1, String param2) {
         AddFragment fragment = new AddFragment();
         Bundle args = new Bundle();
-
         fragment.setArguments(args);
         return fragment;
     }
@@ -54,7 +54,7 @@ public class AddFragment extends Fragment implements View.OnClickListener, Adapt
         super.onCreate(savedInstanceState);
 
         wordViewModel = new ViewModelProvider(this).get(WordViewModel.class);
-        itemViewModel = new ViewModelProvider(getActivity()).get(ItemViewModel.class);
+        toolbarViewModel = new ViewModelProvider(getActivity()).get(ToolbarViewModel.class);
         categoryViewModel = new ViewModelProvider(this).get(CategoryViewModel.class);
     }
 
@@ -67,9 +67,36 @@ public class AddFragment extends Fragment implements View.OnClickListener, Adapt
 
         setListeners();
         setSpinner();
+        setDefaultColor();
 
         binding.addWord.setOnClickListener(v -> addWord());
         return view;
+    }
+
+    private void setDefaultColor() {
+        SharedPrefManager sharedPrefManager = new SharedPrefManager(getActivity());
+        String option = sharedPrefManager.getDefaultColor();
+        if (option != null) {
+            switch (option) {
+                case "green":
+                    binding.formLayout.setBackgroundColor(getContext().getColor(R.color.color_emerald));
+                    break;
+                case "purple":
+                    binding.formLayout.setBackgroundColor(getContext().getColor(R.color.color_amethyst));
+                    break;
+                case "yellow":
+                    binding.formLayout.setBackgroundColor(getContext().getColor(R.color.color_sun_flower));
+                    break;
+                case "blue":
+                    binding.formLayout.setBackgroundColor(getContext().getColor(R.color.color_peter_rıver));
+                    break;
+                case "red":
+                default:
+                    binding.formLayout.setBackgroundColor(getContext().getColor(R.color.color_alizarin));
+                    break;
+            }
+        }
+
     }
 
     private void setSpinner() {
@@ -113,12 +140,11 @@ public class AddFragment extends Fragment implements View.OnClickListener, Adapt
 
         }
 
-
     }
 
     private void cancelToAdding() {
         getActivity().getSupportFragmentManager().popBackStack();
-        itemViewModel.setData(true);
+        toolbarViewModel.setToolbarState(true);
         onDetach();
     }
 
@@ -173,8 +199,6 @@ public class AddFragment extends Fragment implements View.OnClickListener, Adapt
         //if soft keyboard is active, close keyboard
         InputMethodManager inputMethodManager = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
         inputMethodManager.hideSoftInputFromWindow(view.getWindowToken(), 0);
-
-
     }
 
     @Override

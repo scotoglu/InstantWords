@@ -152,12 +152,10 @@ public class Word implements Parcelable {
     public void setLearned(boolean learned) {
         isLearned = learned;
     }
-
     @Override
     public int describeContents() {
         return 0;
     }
-
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeInt(id);

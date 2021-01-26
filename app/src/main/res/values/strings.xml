@@ -21,4 +21,15 @@
 
     <string name="category_all">All</string>
     <string name="changes_saved">Changes saved.</string>
+
+    <string name="default_color">Default Color</string>
+    <!--    used for default color selection for Add Word Fragment-->
+    <string-array name="colors">
+        <item>Select</item>
+        <item>Red</item>
+        <item>Green</item>
+        <item>Blue</item>
+        <item>Purple</item>
+        <item>Yellow</item>
+    </string-array>
 </resources>

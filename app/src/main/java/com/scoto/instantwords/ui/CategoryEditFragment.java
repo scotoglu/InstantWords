@@ -15,7 +15,7 @@ import com.scoto.instantwords.databinding.FragmentCategoryEditBinding;
 import com.scoto.instantwords.ui.adapter.CategoryAdapter;
 import com.scoto.instantwords.utils.interfaces.IDialogDismiss;
 import com.scoto.instantwords.viewmodel.CategoryViewModel;
-import com.scoto.instantwords.viewmodel.WordViewModel;
+
 
 public class CategoryEditFragment extends DialogFragment implements IDialogDismiss {
 

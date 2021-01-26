@@ -2,10 +2,9 @@ package com.scoto.instantwords.ui.adapter;
 
 
 import android.content.Context;
-import android.graphics.Color;
 import android.os.Build;
-import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Filter;
 import android.widget.Filterable;
@@ -32,34 +31,34 @@ import java.util.List;
 public class WordAdapter extends RecyclerView.Adapter<WordAdapter.ViewHolder> implements Filterable {
 
     private static final String TAG = "WordAdapter";
-    private List<Word> wordList, selectedList;
-    private SelectedCount selectedCount;
+    private List<Word> wordList;
+
     private Context context;
     private WordViewModel wordViewModel;
     private HashMap<Word, Integer> selected;
     private SearchFilter filter;
     private List<Word> filteredList;
+    private Fragment fragment;
 
+    //Variables for ActionMode.
+    private boolean isEnable = false;
+    private boolean isSelectAll = false;
+    private List<Word> selectedList = new ArrayList<>();
 
-
-    public WordAdapter(SelectedCount count, Fragment fragment) {
+    public WordAdapter(Fragment fragment) {
         wordViewModel = new ViewModelProvider(fragment).get(WordViewModel.class);
-        this.selectedCount = count;
+
+        this.fragment = fragment;
         this.selectedList = new ArrayList<>();
         this.selected = new HashMap<>();
         this.filteredList = new ArrayList<>();
-    }
-
-    public interface SelectedCount {
-        void onSelectedItem(int data);
-
-        void onUnSelectedItem(int data);
     }
 
 
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        //    acMoTextViewModel = new ViewModelProvider(fragment).get(AcMoTextViewModel.class);
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
         WordItemBinding binding = WordItemBinding.inflate(inflater, parent, false);
         return new ViewHolder(binding);
@@ -69,35 +68,117 @@ public class WordAdapter extends RecyclerView.Adapter<WordAdapter.ViewHolder> im
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         final Word word = wordList.get(position);
         holder.bind(word);
-        holder.wordItemBinding.cardView.setOnClickListener(v -> {
-//            if (!word.isSelected) {
-//                word.setSelected(true);
-//                selected.put(word, position);
-//                setSelected(holder);
-//                selectedCount.onSelectedItem(selected.size());
+//        holder.wordItemBinding.cardLinear.setOnLongClickListener(v -> {
+//            if (!isEnable) {
+//                //When action mode is not enable
+//                //Initialize action mode
+//                ActionMode.Callback callback = new ActionMode.Callback() {
+//                    @Override
+//                    public boolean onCreateActionMode(ActionMode mode, Menu menu) {
+//                        Log.d(TAG, "onCreateActionMode: Called");
+//                        //Initializing menu inflater
+//                        MenuInflater menuInflater = mode.getMenuInflater();
+//                        menuInflater.inflate(R.menu.action_menu, menu);
+//                        return true;
+//                    }
+//
+//                    @Override
+//                    public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
+//                        Log.d(TAG, "onPrepareActionMode: Called");
+//                        //When action mode is prepare
+//                        isEnable = true;
+//                        //called each time when item clicked
+//                        clickItem(holder);
+//                        //Set observer
+//                        acMoTextViewModel.getText().observe(fragment, s -> {
+//                            mode.setTitle(String.format("%s Selected", s));
+//                        });
+//                        return true;
+//                    }
+//
+//                    @Override
+//                    public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
+//                        Log.d(TAG, "onActionItemClicked: ");
+//                        int id = item.getItemId();
+//                        switch (id) {
+//                            case R.id.deleteMul:
+//                                //Delete from db and list. For now just from list.
+//                                for (Word w : wordList
+//                                ) {
+//                                    wordList.remove(w);
+//                                }
+//                                mode.finish();
+//                                break;
+//                            case R.id.selectAll:
+//                                if (selectedList.size() == wordList.size()) {
+//                                    //When all item selected.
+//                                    //Set isSelectAll  false;
+//                                    isSelectAll = false;
+//                                    selectedList.clear();
+//                                } else {
+//                                    //When all item unselected
+//                                    isSelectAll = true;
+//                                    selectedList.clear();
+//                                    selectedList.addAll(wordList);
+//                                }
+//                                acMoTextViewModel.setText(String.valueOf(selectedList.size()));
+//                                notifyDataSetChanged();
+//                                break;
+//                        }
+//                        return true;
+//                    }
+//
+//                    @Override
+//                    public void onDestroyActionMode(ActionMode mode) {
+//                        Log.d(TAG, "onDestroyActionMode: ");
+//                        //When action mode is destroy
+//                        isEnable = false;
+//                        isSelectAll = false;
+//                        selectedList.clear();
+//                        notifyDataSetChanged();
+//                    }
+//                };
+//                ((AppCompatActivity) v.getContext()).startSupportActionMode(callback);
 //            } else {
-//                word.setSelected(false);
-//                selected.remove(word);
-//                unselected(holder, word);
-//                selectedCount.onUnSelectedItem(selected.size());
+//                //When action mode is already enable
+//                clickItem(holder);
 //            }
+//
+//            if (isSelectAll) {
+//                //When all item selected
+//                holder.wordItemBinding.cardLinear.setBackgroundColor(Color.LTGRAY);
+//            } else {
+//                //when all item unselected
+//                //Hide all checkbox
+//                holder.wordItemBinding.cardLinear.setBackgroundColor(Color.parseColor(word.getBgColor()));
+//            }
+//            return true;
+//        });
 
-            //TODO handle first deletion.
-            //TODO activate with onClick.
+        holder.wordItemBinding.cardLinear.setOnClickListener(v -> {
             WordFragment wordFragment = WordFragment.newInstance(word);
             FragmentManager fm = ((MainActivity) context).getSupportFragmentManager();
             FragmentTransaction ft = fm.beginTransaction();
             ft.replace(R.id.main_content, wordFragment).addToBackStack(null).commit();
-
         });
     }
 
-//    private void setSelected(ViewHolder holder) {
-//        holder.wordItemBinding.cardLinear.setBackgroundColor(context.getColor(R.color.appbar_bg));
-//    }
+//    private void clickItem(ViewHolder holder) {
 //
-//    private void unselected(ViewHolder holder, Word word) {
-//        holder.wordItemBinding.cardLinear.setBackgroundColor(Color.parseColor(word.getBgColor()));
+//        Word word = getWordList().get(holder.getAdapterPosition());
+//
+//        if (!word.isSelected()) {
+//            //When item not selected
+//            holder.wordItemBinding.cardLinear.setBackgroundColor(Color.parseColor(word.getBgColor()));
+//            word.setSelected(true);
+//            selectedList.add(word);
+//        } else {
+//            //when item selected
+//            holder.wordItemBinding.cardLinear.setBackgroundColor(Color.LTGRAY);
+//            word.setSelected(false);
+//            //remove item from selected list
+//            selectedList.remove(word);
+//        }
 //    }
 
     @Override
@@ -130,7 +211,7 @@ public class WordAdapter extends RecyclerView.Adapter<WordAdapter.ViewHolder> im
     }
 
     public void resetState() {
-        if (selected.size() > 0 ) {
+        if (selected.size() > 0) {
             selected.clear();
         }
         notifyDataSetChanged();
@@ -155,9 +236,18 @@ public class WordAdapter extends RecyclerView.Adapter<WordAdapter.ViewHolder> im
     public class ViewHolder extends RecyclerView.ViewHolder {
         private WordItemBinding wordItemBinding;
 
+
         public ViewHolder(WordItemBinding binding) {
             super(binding.getRoot());
             this.wordItemBinding = binding;
+
+            wordItemBinding.cardLinear.setOnLongClickListener(v -> {
+
+                wordItemBinding.checkboxLayout.setVisibility(View.VISIBLE);
+
+                return false;
+            });
+
         }
 
         public void bind(Word word) {

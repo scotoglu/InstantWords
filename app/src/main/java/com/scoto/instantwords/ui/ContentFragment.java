@@ -1,64 +1,53 @@
 package com.scoto.instantwords.ui;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Spinner;
-import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.SearchView;
-import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
+import com.scoto.instantwords.MainActivity;
 import com.scoto.instantwords.R;
 import com.scoto.instantwords.data.model.Category;
 import com.scoto.instantwords.databinding.FragmentContentBinding;
 import com.scoto.instantwords.ui.adapter.WordAdapter;
 import com.scoto.instantwords.viewmodel.CategoryViewModel;
-import com.scoto.instantwords.viewmodel.ItemViewModel;
+import com.scoto.instantwords.viewmodel.ToolbarViewModel;
 import com.scoto.instantwords.viewmodel.WordViewModel;
 
-public class ContentFragment extends Fragment implements WordAdapter.SelectedCount {
+public class ContentFragment extends Fragment {
 
     private WordViewModel wordViewModel;
     private FragmentContentBinding binding;
     private WordAdapter wordAdapter;
-    private CoordinatorLayout.LayoutParams layoutParams;
-    private SelectedToolbar selectedToolbar;
     private SearchView searchView;
-    private ItemViewModel itemViewModel;
+    private ToolbarViewModel toolbarViewModel;
     private String selectedCategory = "All";
     private int selectedCategoryId = -1;
     private int DEFAULT_SELECTION = -1;
-    private boolean isOpen = false;
 
 
-
-    //Interface to control MainActivity Toolbar reaction.
-    public interface SelectedToolbar {
-        void setToolbar();
-
-        void resetToolbar();
-    }
-
-
-    public ContentFragment(SelectedToolbar selectedToolbar) {
-        this.selectedToolbar = selectedToolbar;
+    public ContentFragment() {
+        //Empty Constructor
     }
 
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        itemViewModel = new ViewModelProvider(getActivity()).get(ItemViewModel.class);
         CategoryViewModel categoryViewModel = new ViewModelProvider(this).get(CategoryViewModel.class);
+        toolbarViewModel = new ViewModelProvider(getActivity()).get(ToolbarViewModel.class);
         DEFAULT_SELECTION = categoryViewModel.getCategoryList().get(0).getId();
     }
 
@@ -86,6 +75,7 @@ public class ContentFragment extends Fragment implements WordAdapter.SelectedCou
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        setHasOptionsMenu(true);
         binding = FragmentContentBinding.inflate(inflater, container, false);
         searchView = getActivity().findViewById(R.id.searchView);
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
@@ -99,12 +89,6 @@ public class ContentFragment extends Fragment implements WordAdapter.SelectedCou
                 wordAdapter.getFilter().filter(newText);
                 return true;
             }
-        });
-        layoutParams = (CoordinatorLayout.LayoutParams) binding.coordinatorLayout.getLayoutParams();
-        binding.cancel.setOnClickListener(v -> {
-            binding.appBar.setVisibility(View.INVISIBLE);
-            itemViewModel.setData(true);
-            wordAdapter.resetState();
         });
 
         Spinner spinner = getActivity().findViewById(R.id.contentFilter);
@@ -123,13 +107,6 @@ public class ContentFragment extends Fragment implements WordAdapter.SelectedCou
             }
         });
 
-        itemViewModel.setData(true);
-
-        binding.delete.setOnClickListener(v -> {
-            wordAdapter.delete();
-            binding.appBar.setVisibility(View.INVISIBLE);
-            selectedToolbar.resetToolbar();
-        });
 
         binding.addBtn.setOnClickListener(v -> {
             FragmentManager fm = getActivity().getSupportFragmentManager();
@@ -138,7 +115,7 @@ public class ContentFragment extends Fragment implements WordAdapter.SelectedCou
                     .add(R.id.main_content, new AddFragment())
                     .addToBackStack(null)
                     .commit();
-            selectedToolbar.setToolbar();
+            toolbarViewModel.setToolbarState(false);
         });
 
         setRecyclerView();
@@ -147,7 +124,7 @@ public class ContentFragment extends Fragment implements WordAdapter.SelectedCou
 
 
     private void setRecyclerView() {
-        wordAdapter = new WordAdapter(this, this);
+        wordAdapter = new WordAdapter(this);
         binding.recyclerView.setLayoutManager(
                 new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
         );
@@ -157,37 +134,47 @@ public class ContentFragment extends Fragment implements WordAdapter.SelectedCou
 
     }
 
-    @Override
-    public void onSelectedItem(int count) {
-        binding.itemCount.setText(String.valueOf(count));
-        if (count > 0) {
+//    @Override
+//    public void onItemSelected(int item) {
+//        binding.itemCount.setText(String.valueOf(item));
+//        if (item > 0) {
+//            binding.appBar.setVisibility(View.VISIBLE);
+//            selectedToolbar.setToolbar();
+//        }
+//    }
+//
+//    @Override
+//    public void onItemUnselected(int item) {
+//        binding.itemCount.setText(String.valueOf(item));
+//        if (item <= 0) {
+//            binding.appBar.setVisibility(View.INVISIBLE);
+//            selectedToolbar.resetToolbar();
+//        }
+//    }
 
-            binding.appBar.setVisibility(View.VISIBLE);
-            selectedToolbar.setToolbar();
-        }
-    }
-
-    @Override
-    public void onUnSelectedItem(int count) {
-        binding.itemCount.setText(String.valueOf(count));
-        if (count <= 0) {
-            binding.appBar.setVisibility(View.INVISIBLE);
-            selectedToolbar.resetToolbar();
-        }
-    }
 
     @Override
     public void onResume() {
         super.onResume();
-        selectedToolbar.resetToolbar();
+
+        toolbarViewModel.setToolbarState(true);
         binding.recyclerView.setClickable(true);
     }
 
     @Override
     public void onStop() {
         super.onStop();
-        selectedToolbar.setToolbar();
+
+        toolbarViewModel.setToolbarState(false);
         binding.recyclerView.setClickable(false);
+    }
+
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        if (context instanceof MainActivity) {
+
+        }
     }
 
     @Override

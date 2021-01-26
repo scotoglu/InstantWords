@@ -1,7 +1,6 @@
 package com.scoto.instantwords;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -27,16 +26,17 @@ import com.scoto.instantwords.ui.CategoryEditFragment;
 import com.scoto.instantwords.ui.ContentFragment;
 import com.scoto.instantwords.ui.SettingFragment;
 import com.scoto.instantwords.viewmodel.CategoryViewModel;
-import com.scoto.instantwords.viewmodel.ItemViewModel;
+import com.scoto.instantwords.viewmodel.ToolbarViewModel;
 
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements
-        NavigationView.OnNavigationItemSelectedListener,
-        ContentFragment.SelectedToolbar {
+        NavigationView.OnNavigationItemSelectedListener {
     private static final String TAG = "MainActivity";
     private ActivityMainBinding binding;
-    private ItemViewModel itemViewModel;
+
+    private ToolbarViewModel toolbarViewModel;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,21 +44,23 @@ public class MainActivity extends AppCompatActivity implements
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         View view = binding.getRoot();
         setContentView(view);
-        //TODO use ItemViewModel open/close AppBarLayout in MainActivity, change with Interfaces are SelectedToolbar and SelectedCount
-        itemViewModel = new ViewModelProvider(this).get(ItemViewModel.class);
-        itemViewModel.getData().observe(this, aBoolean -> {
-            Log.d(TAG, "onCreate: ");
+
+        //Controls toolbar visibility when fragment changes.
+        toolbarViewModel = new ViewModelProvider(this).get(ToolbarViewModel.class);
+        toolbarViewModel.getToolbarState().observe(this, aBoolean -> {
             if (aBoolean) {
                 binding.appBarMain.setVisibility(View.VISIBLE);
+            } else {
+                binding.appBarMain.setVisibility(View.INVISIBLE);
             }
         });
-
         //Load ContentFragment
-        ContentFragment contentFragment = new ContentFragment(this);
         FragmentManager fm = getSupportFragmentManager();
         FragmentTransaction ft = fm.beginTransaction();
-        ft.replace(R.id.main_content, contentFragment).commit();
+        ft.replace(R.id.main_content, new ContentFragment()).commit();
 
+
+        //Set and initialize views´´
         configurationToolbar();
         configurationSearchView();
         configurationDrawerLayout();
@@ -174,17 +176,6 @@ public class MainActivity extends AppCompatActivity implements
         return false;
     }
 
-    @Override
-    public void setToolbar() {
-        binding.appBarMain.setVisibility(View.INVISIBLE);
-        binding.searchView.onActionViewCollapsed();
-
-    }
-
-    @Override
-    public void resetToolbar() {
-        binding.appBarMain.setVisibility(View.VISIBLE);
-    }
 
     @Override
     protected void onDestroy() {

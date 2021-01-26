@@ -38,6 +38,7 @@ public abstract class AppDatabase extends RoomDatabase {
     private static RoomDatabase.Callback callback = new Callback() {
         @Override
         public void onCreate(@NonNull SupportSQLiteDatabase db) {
+            //Called database created first time.
             super.onCreate(db);
             prePopulateCategoryTable(db);
         }
@@ -49,6 +50,5 @@ public abstract class AppDatabase extends RoomDatabase {
         SupportSQLiteStatement statement = db.compileStatement(sql);
         statement.bindString(2, "All");
         statement.executeInsert();
-
     }
 }

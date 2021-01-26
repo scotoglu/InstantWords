@@ -59,8 +59,53 @@
 
                 android:id="@+id/divider4"
                 android:layout_width="match_parent"
-                android:layout_height="10dp"
+                android:layout_height="5dp"
                 android:layout_below="@id/dataClearLinear"
+                android:background="?android:attr/listDivider" />
+
+            <RelativeLayout
+                android:id="@+id/defaultColorLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/divider4">
+
+                <TextView
+                    android:id="@+id/defCol"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentStart="true"
+                    android:layout_marginLeft="25dp"
+                    android:paddingHorizontal="10dp"
+                    android:paddingTop="10dp"
+                    android:text="@string/default_color"
+                    android:textSize="18sp" />
+
+                <TextView
+                    android:id="@+id/selectedDefaultColor"
+                    android:layout_width="100dp"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/defCol"
+                    android:layout_marginLeft="35dp"
+                    android:hint="Null"
+                    android:padding="3dp"
+                    android:textAlignment="center" />
+
+                <Spinner
+                    android:id="@+id/defaultColor"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginVertical="5dp"
+                    android:layout_marginRight="10dp"
+                    android:splitMotionEvents="true" />
+            </RelativeLayout>
+
+            <View
+
+                android:id="@+id/divider5"
+                android:layout_width="match_parent"
+                android:layout_height="5dp"
+                android:layout_below="@id/defaultColorLayout"
                 android:background="?android:attr/listDivider" />
         </RelativeLayout>
     </androidx.coordinatorlayout.widget.CoordinatorLayout>

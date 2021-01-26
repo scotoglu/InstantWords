@@ -17,14 +17,12 @@ import com.scoto.instantwords.data.model.Category;
 import com.scoto.instantwords.databinding.CategoryItemBinding;
 import com.scoto.instantwords.utils.interfaces.IDialogDismiss;
 import com.scoto.instantwords.viewmodel.CategoryViewModel;
-import com.scoto.instantwords.viewmodel.WordViewModel;
 
 import java.util.List;
 
 public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHolder> {
     private static final String TAG = "CategoryAdapter";
     private CategoryViewModel categoryViewModel;
-    private WordViewModel wordViewModel;
     private List<Category> categoryList;
     private Context context;
     private Fragment fragment;
@@ -35,7 +33,7 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
         this.dialogDismiss = dialogDismiss;
         this.fragment = fragment;
         categoryViewModel = new ViewModelProvider(fragment).get(CategoryViewModel.class);
-        wordViewModel = new ViewModelProvider(fragment).get(WordViewModel.class);
+
     }
 
     @NonNull
